@@ -16,7 +16,7 @@ class ColorsValidatorTest < Minitest::Test
 
     validator.validate(record)
 
-    assert_equal record.errors.messages, { color: ['Colors must all be present, be valid and not be repeated'] }
+    assert_equal record.errors.messages, { colors: ['must all be present, be valid and not be repeated'] }
   end
 
   def test_empty_colors_are_invalid
@@ -25,7 +25,7 @@ class ColorsValidatorTest < Minitest::Test
 
     validator.validate(record)
 
-    assert_equal record.errors.messages, { color: ['Colors must all be present, be valid and not be repeated'] }
+    assert_equal record.errors.messages, { colors: ['must all be present, be valid and not be repeated'] }
   end
 
   def test_less_than_four_colors_are_invalid
@@ -34,7 +34,7 @@ class ColorsValidatorTest < Minitest::Test
 
     validator.validate(record)
 
-    assert_equal record.errors.messages, { color: ['Colors must all be present, be valid and not be repeated'] }
+    assert_equal record.errors.messages, { colors: ['must all be present, be valid and not be repeated'] }
   end
 
   def test_more_than_four_colors_are_invalid
@@ -43,7 +43,7 @@ class ColorsValidatorTest < Minitest::Test
 
     validator.validate(record)
 
-    assert_equal record.errors.messages, { color: ['Colors must all be present, be valid and not be repeated'] }
+    assert_equal record.errors.messages, { colors: ['must all be present, be valid and not be repeated'] }
   end
 
   def test_repeated_colors_are_invalid
@@ -52,6 +52,6 @@ class ColorsValidatorTest < Minitest::Test
 
     validator.validate(record)
 
-    assert_equal record.errors.messages, { color: ['Colors must all be present, be valid and not be repeated'] }
+    assert_equal record.errors.messages, { colors: ['must all be present, be valid and not be repeated'] }
   end
 end

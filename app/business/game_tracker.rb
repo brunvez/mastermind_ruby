@@ -1,6 +1,8 @@
 class GameTracker
   MAX_ROUNDS = 10
 
+  attr_reader :game
+
   def self.start_game(secret_code_colors: nil)
     secret_code_colors ||= Game::VALID_COLOR_COMBINATIONS.sample
     game = Game.new
@@ -32,9 +34,11 @@ class GameTracker
     secret_code.colors == last_guess.colors
   end
 
-  private
+  def rounds_left
+    MAX_ROUNDS - @game.guesses.count
+  end
 
   def rounds_are_over?
-    @game.guesses.count >= MAX_ROUNDS
+    rounds_left <= 0
   end
 end

@@ -1,0 +1,22 @@
+<%= link_to 'New Game', games_path, method: :post, class: %w[btn btn-primary] %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Started At</th>
+      <th>Rounds Left</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @games.map do |game| %>
+    <tr>
+      <td><%= game.created_at.to_date %></td>
+      <td><%= game.rounds_left %></td>
+      <td><%= link_to game_status(game), game_path(game.id) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+

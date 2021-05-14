@@ -1,0 +1,139 @@
+<% if notice.present? %>
+  <div class="alert alert-info"><%= notice %></div>
+<% end %>
+
+<div class="row justify-content-md-center">
+  <div class="col-md-7">
+    <div class="container" data-controller="board">
+      <% if @game.game_won? || @game.rounds_are_over? %>
+        <div class="row">
+
+          <div class="col-md-3">
+          </div>
+
+          <div class="col-md-6">
+            <% @game.secret_code_colors.each do |color| %>
+              <span class="ball ball--<%= color %>"></span>
+            <% end %>
+          </div>
+
+          <div class="col-md-3">
+           <span class="badge <%= @game.game_won? ? 'badge-success' : 'badge-danger' %>">
+              <%= @game.game_won? ? 'Won' : 'Lost' %>
+            </span>
+          </div>
+        </div>
+      <% end %>
+
+      <% (@game.rounds_left - 1).times do |round| %>
+        <div class="row">
+
+          <div class="col-md-3">
+            <div class="row">
+              <div class="col">
+                <span class="pin"></span>
+                <span class="pin"></span>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <span class="pin"></span>
+                <span class="pin"></span>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-6">
+            <% 4.times do %>
+              <span class="ball"></span>
+            <% end %>
+          </div>
+
+          <div class="col-md-3">
+           <span class="badge badge-info">
+              Round <%= 10 - round %>
+            </span>
+          </div>
+        </div>
+      <% end %>
+
+      <% unless @game.rounds_are_over? %>
+        <%= form_tag game_guesses_path(@game.id), method: :post do %>
+          <div class="row">
+
+            <div class="col-md-3">
+              <div class="row">
+                <div class="col">
+                  <span class="pin"></span>
+                  <span class="pin"></span>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <span class="pin"></span>
+                  <span class="pin"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <% 4.times do |i| %>
+                <span class="ball ball--empty" data-target="board.guess" data-action="click->board#removeGuess"></span>
+                <%= hidden_field_tag "colors[#{i}]" %>
+              <% end %>
+            </div>
+
+            <div class="col-md-3">
+              <button type="submit" class="btn btn-success btn-block">Guess</button>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% total_guesses = @game.guesses.count %>
+      <% @game.guesses.each_with_index.map do |guess, round| %>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row">
+              <div class="col">
+                <% guess.feedback.first(2).each do |pin_type| %>
+                  <span class="pin <%= feedback_pin_css_class(pin_type) %>"></span>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <% guess.feedback.last(2).each do |pin_type| %>
+                  <span class="pin <%= feedback_pin_css_class(pin_type) %>"></span>
+                <% end %>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-6">
+            <% guess.colors.map do |color| %>
+              <span class="ball ball--<%= color %>"></span>
+            <% end %>
+          </div>
+
+          <div class="col-md-3">
+            <span class="badge badge-info">
+              Round <%= total_guesses - round %>
+            </span>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="row justify-content-md-center">
+        <% Game::VALID_COLORS.each do |color| %>
+          <div class="col">
+            <span class="ball ball--<%= color %>" data-target="board.inputBall" data-color="<%= color %>" data-action="click->board#chooseColor"></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

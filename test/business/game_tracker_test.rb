@@ -1,6 +1,6 @@
 require 'minitest/autorun'
 
-class GameTrackerTest < MiniTest::Unit::TestCase
+class GameTrackerTest < MiniTest::Test
   def test_makes_guesses_and_returns_feedback
     tracker = GameTracker.start_game(secret_code_colors: %w[red blue green cyan])
 
@@ -49,5 +49,14 @@ class GameTrackerTest < MiniTest::Unit::TestCase
     tracker.make_guess(%w[red green violet cyan])
 
     refute tracker.game_won?
+  end
+
+  def test_rounds_left
+    tracker = GameTracker.start_game(secret_code_colors: %w[red blue green cyan])
+
+    tracker.make_guess(%w[red green violet cyan])
+    tracker.make_guess(%w[red yellow violet cyan])
+
+    assert tracker.rounds_left == 8
   end
 end
